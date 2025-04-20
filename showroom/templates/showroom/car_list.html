@@ -1,0 +1,27 @@
+{% extends 'showroom/base.html' %}
+
+{% block title %}Car List{% endblock %}
+
+{% block content %}
+<div class="container">
+    <h2 class="my-4">Cars Available in the Showroom</h2>
+
+    <div class="row">
+        {% for car in cars %}
+            <div class="col-md-4 mb-4">
+                <div class="card">
+                    <img src="https://via.placeholder.com/350x200" class="card-img-top" alt="Car image">
+                    <div class="card-body">
+                        <h5 class="card-title">{{ car.merk }} - {{ car.model }}</h5>
+                        <p class="card-text">Year: {{ car.tahun }}</p>
+                        <a href="{% url 'car_detail' car.id %}" class="btn btn-primary">View Details</a>
+                        <a href="{% url 'car_delete' car.id %}" class="btn btn-danger">Delete</a>
+                    </div>
+                </div>
+            </div>
+        {% endfor %}
+    </div>
+
+    <a href="{% url 'car_add' %}" class="btn btn-success">Add a New Car</a>
+</div>
+{% endblock %}

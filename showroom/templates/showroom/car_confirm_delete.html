@@ -1,0 +1,20 @@
+{% extends 'showroom/base.html' %}
+
+{% block title %}Hapus Mobil{% endblock %}
+
+{% block content %}
+<div class="container">
+    <h2 class="my-4">Apakah Anda yakin ingin menghapus mobil ini?</h2>
+    <p>
+        <strong>{{ object.merk }} {{ object.model }} ({{ object.tahun }})</strong>
+    </p>
+
+    <form method="post">
+        {% csrf_token %}
+        
+        <!-- Confirmation Buttons -->
+        <button type="submit" class="btn btn-danger">Ya, Hapus</button>
+        <a href="{% url 'car_detail' object.pk %}" class="btn btn-secondary">Batal</a>
+    </form>
+</div>
+{% endblock %}

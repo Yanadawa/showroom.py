@@ -1,0 +1,40 @@
+{% extends 'showroom/base.html' %}
+
+{% block content %}
+<div class="container">
+    <h2>{{ car.merk }} {{ car.model }} ({{ car.tahun }})</h2>
+
+    <ul class="list-group mb-4">
+        <li class="list-group-item"><strong>Harga Dasar:</strong> Rp {{ car.harga_dasar|floatformat:2 }}</li>
+        {% if car.pinjaman_bank and car.suku_bunga %}
+            <li class="list-group-item"><strong>Dibiayai oleh Bank:</strong> Ya</li>
+            <li class="list-group-item"><strong>Pinjaman Bank:</strong> Rp {{ car.pinjaman_bank|floatformat:2 }}</li>
+            <li class="list-group-item"><strong>Suku Bunga:</strong> {{ car.suku_bunga }}%</li>
+            <li class="list-group-item"><strong>Estimasi Cicilan per Bulan:</strong> Rp {{ cicilan_bulanan|floatformat:2 }}</li>
+            <li class="list-group-item"><strong>HPP (Harga Pokok Produksi):</strong> Rp {{ hpp|floatformat:2 }}</li>
+        {% else %}
+            <li class="list-group-item"><strong>Dibiayai oleh Bank:</strong> Tidak</li>
+        {% endif %}
+    </ul>
+
+    <hr>
+
+    <h3>Riwayat Service Mobil</h3>
+    <div class="list-group">
+        {% for service in services %}
+            <div class="list-group-item">
+                <strong>{{ service.tanggal }}</strong> - {{ service.deskripsi }} 
+                <span class="badge badge-primary">Rp {{ service.biaya|floatformat:2 }}</span>
+            </div>
+        {% empty %}
+            <div class="list-group-item"><em>Belum ada data service.</em></div>
+        {% endfor %}
+    </div>
+
+    <div class="mt-4">
+        <a href="{% url 'service_add' car.id %}" class="btn btn-primary">Tambah Service Baru</a>
+        <a href="{% url 'car_delete' car.id %}" class="btn btn-danger">Hapus Mobil Ini</a>
+        <a href="{% url 'car_list' %}" class="btn btn-secondary">Kembali ke Daftar Mobil</a>
+    </div>
+</div>
+{% endblock %}

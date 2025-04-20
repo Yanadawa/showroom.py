@@ -1,0 +1,61 @@
+{% extends 'showroom/base.html' %}
+{% load widget_tweaks %}
+
+
+{% block title %}Add New Car{% endblock %}
+
+{% block content %}
+<div class="container mt-4">
+    <h2 class="mb-4">Add a New Car</h2>
+
+    <form method="post" class="card p-4 shadow-sm">
+        {% csrf_token %}
+
+        <div class="mb-3">
+            {{ form.merk.label_tag }} {{ form.merk|add_class:"form-control" }}
+        </div>
+
+        <div class="mb-3">
+            {{ form.model.label_tag }} {{ form.model|add_class:"form-control" }}
+        </div>
+
+        <div class="mb-3">
+            {{ form.tahun.label_tag }} {{ form.tahun|add_class:"form-control" }}
+        </div>
+
+        <div class="mb-3">
+            {{ form.harga_dasar.label_tag }} {{ form.harga_dasar|add_class:"form-control" }}
+        </div>
+
+        <div class="form-check mb-3">
+            {{ form.dibiayai_bank|add_class:"form-check-input" }}
+            {{ form.dibiayai_bank.label_tag|safe }}
+        </div>
+
+        <div id="loan-fields" style="display: none;">
+            <div class="mb-3">
+                {{ form.pinjaman_bank.label_tag }} {{ form.pinjaman_bank|add_class:"form-control" }}
+            </div>
+            <div class="mb-3">
+                {{ form.suku_bunga.label_tag }} {{ form.suku_bunga|add_class:"form-control" }}
+            </div>
+        </div>
+
+        <button type="submit" class="btn btn-primary">Add Car</button>
+    </form>
+
+    <a href="{% url 'car_list' %}" class="btn btn-link mt-3">← Back to car list</a>
+</div>
+
+<script>
+    const checkbox = document.querySelector('input[name="dibiayai_bank"]');
+    const loanFields = document.getElementById("loan-fields");
+
+    function toggleLoanFields() {
+        loanFields.style.display = checkbox.checked ? "block" : "none";
+    }
+
+    checkbox.addEventListener("change", toggleLoanFields);
+    window.addEventListener("DOMContentLoaded", toggleLoanFields);
+</script>
+{% endblock %}
