@@ -3,6 +3,7 @@ from .models import Car, Service
 from .forms import CarForm, ServiceForm
 from django.urls import reverse_lazy
 from django.views.generic.edit import DeleteView
+from decimal import Decimal
 
 # List to all cars
 def car_list(request):
@@ -19,8 +20,10 @@ def car_detail(request, car_id):
     hpp = None
     cicilan_bulanan = None
 
+    # convert suku_bunga to decimal
     if car.pinjaman_bank and car.suku_bunga:
-        total_pinjaman = car.pinjaman_bank * (1 + (car.suku_bunga / 100))
+        suku_bunga_decimal = Decimal(car.suku_bunga)
+        total_pinjaman = car.pinjaman_bank * (1 + (suku_bunga_decimal / 100))
         cicilan_bulanan = total_pinjaman / 12
         hpp = (car.harga_dasar / total_pinjaman) + total_biaya_servis
     else:

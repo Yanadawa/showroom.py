@@ -1,61 +1,87 @@
 {% extends 'showroom/base.html' %}
 {% load widget_tweaks %}
 
-
-{% block title %}Add New Car{% endblock %}
+{% block title %}Add Car{% endblock %}
 
 {% block content %}
-<div class="container mt-4">
-    <h2 class="mb-4">Add a New Car</h2>
+<div class="container">
+    <h2 class="my-4">Add Car</h2>
 
-    <form method="post" class="card p-4 shadow-sm">
+    <form method="post">
         {% csrf_token %}
 
-        <div class="mb-3">
-            {{ form.merk.label_tag }} {{ form.merk|add_class:"form-control" }}
+        <!-- Car Details -->
+        <div class="form-group">
+            <label for="{{ form.merk.id_for_label }}" class="form-label">Merk</label>
+            {{ form.merk|add_class:"form-control" }}
         </div>
 
-        <div class="mb-3">
-            {{ form.model.label_tag }} {{ form.model|add_class:"form-control" }}
+        <div class="form-group">
+            <label for="{{ form.model.id_for_label }}" class="form-label">Model</label>
+            {{ form.model|add_class:"form-control" }}
         </div>
 
-        <div class="mb-3">
-            {{ form.tahun.label_tag }} {{ form.tahun|add_class:"form-control" }}
+        <div class="form-group">
+            <label for="{{ form.tahun.id_for_label }}" class="form-label">Tahun</label>
+            {{ form.tahun|add_class:"form-control" }}
         </div>
 
-        <div class="mb-3">
-            {{ form.harga_dasar.label_tag }} {{ form.harga_dasar|add_class:"form-control" }}
+        <div class="form-group">
+            <label for="{{ form.harga_dasar.id_for_label }}" class="form-label">Harga Dasar</label>
+            {{ form.harga_dasar|add_class:"form-control" }}
         </div>
 
-        <div class="form-check mb-3">
-            {{ form.dibiayai_bank|add_class:"form-check-input" }}
-            {{ form.dibiayai_bank.label_tag|safe }}
+        <!-- Pinjaman Bank -->
+        <div class="form-group" id="pinjaman_bank_container">
+            <label for="{{ form.pinjaman_bank.id_for_label }}" class="form-label">Pinjaman Bank</label>
+            {{ form.pinjaman_bank|add_class:"form-control" }}
         </div>
 
-        <div id="loan-fields" style="display: none;">
-            <div class="mb-3">
-                {{ form.pinjaman_bank.label_tag }} {{ form.pinjaman_bank|add_class:"form-control" }}
-            </div>
-            <div class="mb-3">
-                {{ form.suku_bunga.label_tag }} {{ form.suku_bunga|add_class:"form-control" }}
-            </div>
+        <!-- Suku Bunga -->
+        <div class="form-group" id="suku_bunga_container">
+            <label for="{{ form.suku_bunga.id_for_label }}" class="form-label">Suku Bunga</label>
+            {{ form.suku_bunga|add_class:"form-control" }}
         </div>
 
-        <button type="submit" class="btn btn-primary">Add Car</button>
+        <!-- Dibiayai oleh Bank Checkbox -->
+        <div class="form-check">
+            <input type="checkbox" id="{{ form.dibiayai_bank.id_for_label }}" 
+                name="{{ form.dibiayai_bank.name }}" 
+                class="form-check-input" 
+                {% if form.dibiayai_bank.value %} checked {% endif %} 
+            />
+            <label class="form-check-label" for="{{ form.dibiayai_bank.id_for_label }}">
+                {{ form.dibiayai_bank.label }}
+            </label>
+        </div>
+
+        <button type="submit" class="btn btn-primary">Save Car</button>
     </form>
-
-    <a href="{% url 'car_list' %}" class="btn btn-link mt-3">← Back to car list</a>
 </div>
 
 <script>
-    const checkbox = document.querySelector('input[name="dibiayai_bank"]');
-    const loanFields = document.getElementById("loan-fields");
+    document.addEventListener('DOMContentLoaded', function() {
+        var dibiayaiBankCheckbox = document.getElementById("id_dibiayai_bank");
+        var pinjamanBankContainer = document.getElementById("pinjaman_bank_container");
+        var sukuBungaContainer = document.getElementById("suku_bunga_container");
 
-    function toggleLoanFields() {
-        loanFields.style.display = checkbox.checked ? "block" : "none";
-    }
+        // Function to toggle the visibility of the fields
+        function toggleLoanFields() {
+            if (dibiayaiBankCheckbox.checked) {
+                pinjamanBankContainer.style.display = 'block';
+                sukuBungaContainer.style.display = 'block';
+            } else {
+                pinjamanBankContainer.style.display = 'none';
+                sukuBungaContainer.style.display = 'none';
+            }
+        }
 
-    checkbox.addEventListener("change", toggleLoanFields);
-    window.addEventListener("DOMContentLoaded", toggleLoanFields);
+        // Initial call to ensure the form is correctly rendered on load
+        toggleLoanFields();
+
+        // Add event listener to the checkbox to toggle the fields
+        dibiayaiBankCheckbox.addEventListener('change', toggleLoanFields);
+    });
 </script>
+
 {% endblock %}

@@ -13,13 +13,20 @@ class CarForm(forms.ModelForm):
         model = Car # Link the car model
         fields = ['merk', 'model', 'tahun', 'harga_dasar', 'pinjaman_bank', 'suku_bunga']
 
-    def __init__(self, *args, **kwargs):
-        super().__init__(*args, **kwargs)
+    # def __init__(self, *args, **kwargs):
+    #     super().__init__(*args, **kwargs)
 
-        # Hide the loan if dibiayai_bank is true
-        if not self.data.get('dibiayai_bank'):
-            self.fields['pinjaman_bank'].widget = forms.HiddenInput()
-            self.fields['suku_bunga'].widget = forms.HiddenInput()
+    #     # Hide the loan if dibiayai_bank is true
+    #     is_checked = False
+
+    #     if 'dibiayai_bank' in self.data:
+    #         is_checked = True
+    #     elif self.initial.get('dibiayai_bank') or (self.instance.dibiayai_bank):
+    #         is_checked = True
+
+    #     if not is_checked:
+    #         self.fields['pinjaman_bank'].widget = forms.HiddenInput()
+    #         self.fields['suku_bunga'].widget = forms.HiddenInput()
 
 class ServiceForm(forms.ModelForm):
     tanggal = forms.DateField(required=True,
